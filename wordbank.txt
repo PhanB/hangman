@@ -1,0 +1,11 @@
+apple
+orange
+banana
+cloud
+dog
+cat
+vacuum
+milk
+rice
+beach
+leash
