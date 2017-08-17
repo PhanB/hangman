@@ -4,10 +4,13 @@ Date: August 17, 2017
 Purpose: Simple recreation of hangman in Python
 """
 import random 
+import ascii
+
+MAX_LIVES = len(ascii.hangman) - 1
 
 def main():
 	#game setup
-	lifeCount = [6]
+	lifeCount = [MAX_LIVES]
 	guessed = False
 	answer = list(retrieveWord()) #convert string to list so it is mutable
 	revealed = []
@@ -25,6 +28,7 @@ def main():
 	while(lifeCount[0] > 0 and not guessed):
 		printRevealed(revealed)
 		guessed = guess(char_dict, revealed, lifeCount)
+		printHangman(lifeCount[0])
 
 	if(guessed): #they guessed the answer
 		print("You win! You guessed the word: " + ''.join(answer))
@@ -61,6 +65,9 @@ def guess(dictionary, revealed, lives):
 def printRevealed(word):
 	for c in word:
 		print(c,end=" ")
+
+def printHangman(lives):
+	print(ascii.hangman[MAX_LIVES-lives])
 
 
 if __name__ == "__main__":
