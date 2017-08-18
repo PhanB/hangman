@@ -22,7 +22,6 @@ def main():
 	while(keepPlaying == 'y' or keepPlaying == 'yes'):
 		playRound()
 		keepPlaying = input('Would you like to keep playing (y/n)?: ')
-		moveCursorUp(1) #handle extra line
 	print("Thank you for playing!")
 
 #Purpose: Plays 1 round of hangman -- picks a word and let user guess until they win/lose
