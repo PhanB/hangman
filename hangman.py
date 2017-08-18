@@ -10,6 +10,14 @@ import fonts
 MAX_LIVES = len(ascii.hangman) - 1
 
 def main():
+	keepPlaying = 'y'
+	while(keepPlaying == 'y' or keepPlaying == 'yes'):
+		playRound()
+		keepPlaying = input('Would you like to keep playing (y/n)?: ')
+	print("Thank you for playing!")
+
+
+def playRound():
 	#game setup
 	lifeCount = [MAX_LIVES]
 	guessed = False
@@ -77,12 +85,9 @@ def printHangman(revealedChars, lives):
 	hangman_info = ascii.hangman[MAX_LIVES-lives].splitlines()
 	halfway = int(len(hangman_info) / 2)
 	hangman_info[halfway]+= '\t\t' + fonts.BOLD + revealedChars + fonts.ENDC
-	#hangman_info[halfway+1]+= '\t\t' + "Lives: " + str(lives)
 	for line in hangman_info:
 		print(line)
 			
-	#print(''.join(hangman_info))
-
 def	printCustomize(customizations, text):
 	sb = []
 	#add font modifiers before text
