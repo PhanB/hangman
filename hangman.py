@@ -47,15 +47,18 @@ def playRound():
 	#game loop -- exit conditions are out of lives or they guessed the word
 	printHangman(spaceRevealed(revealed), lifeCount[0])
 	while(lifeCount[0] > 0 and not guessed):
-		print('****************************************')
+		print()
 		guessed = guess(char_dict, revealed, lifeCount, user_guesses)
 		printHangman(spaceRevealed(revealed), lifeCount[0])
 
+	print("Characters guessed: " + str(user_guesses).replace("'", "")) #remove single quotes from list
 
 	if(guessed): #they guessed the answer
-		printCustomize([fonts.GREEN, fonts.BOLD], "You win!\n")
+		printCustomize([fonts.GREEN, fonts.BOLD], "You win!")
 	else: #they didnt guess the answer
-		printCustomize([fonts.RED, fonts.BOLD], "You lose! The word was: " + ''.join(answer) + "\n")
+		printCustomize([fonts.RED, fonts.BOLD], "You lose! The word was: " + ''.join(answer))
+
+
 #Purpose: Pull a random word from file
 #Inputs: None, but WORDBANK_FILE should be set accordingly
 #Outputs: None
@@ -69,7 +72,7 @@ def retrieveWord():
 #Outputs: Boolean indicating if they won (True = win, False = loss)
 def guess(dictionary, revealed, lives, guesses):
 
-	print("Characters guessed: " + str(guesses))
+	print("Characters guessed: " + str(guesses).replace("'", "") ) #remove single quotes from list
 	
 	#get user guess, but make sure they enter a valid character
 	user_guess = ''
