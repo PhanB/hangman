@@ -5,6 +5,7 @@ Purpose: Simple recreation of hangman in Python
 """
 import random 
 import ascii
+import fonts
 
 MAX_LIVES = len(ascii.hangman) - 1
 
@@ -25,10 +26,13 @@ def main():
 			char_dict[answer[i]] = [i]
 
 	#game loop -- exit conditions are out of lives or they guessed the word
+	printHangman(spaceRevealed(revealed),lifeCount[0])
 	while(lifeCount[0] > 0 and not guessed):
-		printRevealed(revealed)
+		#printRevealed(revealed)
+		print('****************************************')
 		guessed = guess(char_dict, revealed, lifeCount)
-		printHangman(lifeCount[0])
+		printHangman(spaceRevealed(revealed),lifeCount[0])
+
 
 	if(guessed): #they guessed the answer
 		print("You win! You guessed the word: " + ''.join(answer))
@@ -50,7 +54,7 @@ def guess(dictionary, revealed, lives):
 		#remove entry from dictionary
 		del dictionary[user_guess]
 
-		print("Correct!")
+		printCustomize([fonts.GREEN,fonts.BOLD],"CORRECT!")
 
 		#if dictionary is empty, they win
 		if(not bool(dictionary)):
@@ -59,15 +63,40 @@ def guess(dictionary, revealed, lives):
 			return False
 	else: #they guessed incorrectly
 		lives[0]-= 1;
-		print("Incorrect! Lives: " + str(lives))
+		#print(fonts.RED + fonts.BOLD + "Incorrect!" + fonts.ENDC)
+		printCustomize([fonts.RED,fonts.BOLD], "INCORRECT!")
 		return False
 
-def printRevealed(word):
+def spaceRevealed(word):
+	sb = []
 	for c in word:
-		print(c,end=" ")
+		sb.append(c + " ")
+	return ''.join(sb)
 
-def printHangman(lives):
-	print(ascii.hangman[MAX_LIVES-lives])
+def printHangman(revealedChars, lives):
+	hangman_info = ascii.hangman[MAX_LIVES-lives].splitlines()
+	halfway = int(len(hangman_info) / 2)
+	hangman_info[halfway]+= '\t\t' + fonts.BOLD + revealedChars + fonts.ENDC
+	#hangman_info[halfway+1]+= '\t\t' + "Lives: " + str(lives)
+	for line in hangman_info:
+		print(line)
+			
+	#print(''.join(hangman_info))
+
+def	printCustomize(customizations, text):
+	sb = []
+	#add font modifiers before text
+	for customization in customizations:
+		sb.append(customization)
+	#add text
+	sb.append(text)
+	#change font back to normal
+	sb.append(fonts.ENDC)
+
+	print(''.join(sb))
+
+
+
 
 
 if __name__ == "__main__":
