@@ -37,7 +37,7 @@ def playRound():
 	user_guesses = [] #all of user's guesses
 
 	#parse word, fill out dictionary, create string that holds revealed chars
-	for i in range(0,len(answer)-1):
+	for i in range(0,len(answer)):
 		revealed.append('_')
 		if answer[i] in char_dict:
 			char_dict[answer[i]].append(i)
@@ -53,16 +53,15 @@ def playRound():
 
 
 	if(guessed): #they guessed the answer
-		printCustomize([fonts.GREEN, fonts.BOLD], "You win! You guessed the word: " + ''.join(answer))
+		printCustomize([fonts.GREEN, fonts.BOLD], "You win!\n")
 	else: #they didnt guess the answer
-		printCustomize([fonts.RED, fonts.BOLD], "You lose! The word was: " + ''.join(answer))
-	
+		printCustomize([fonts.RED, fonts.BOLD], "You lose! The word was: " + ''.join(answer) + "\n")
 #Purpose: Pull a random word from file
 #Inputs: None, but WORDBANK_FILE should be set accordingly
 #Outputs: None
 def retrieveWord():
-	lines = open(WORDBANK_FILE).readlines()
-	return random.choice(lines)
+	lines = open(WORDBANK_FILE).readlines() 
+	return random.choice(lines).rstrip() #remove newline with rstrip
 	
 #Purpose: Takes in user's guess and reveals or reduces lives accordingly
 #Inputs: dictionary with mappings of character to list of positions in string, string of previously revealed chars,
@@ -70,7 +69,7 @@ def retrieveWord():
 #Outputs: Boolean indicating if they won (True = win, False = loss)
 def guess(dictionary, revealed, lives, guesses):
 
-	print("Charcters guessed: " + str(guesses))
+	print("Characters guessed: " + str(guesses))
 	
 	#get user guess, but make sure they enter a valid character
 	user_guess = ''
