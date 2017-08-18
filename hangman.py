@@ -7,6 +7,7 @@ import random
 import ascii
 import fonts
 import re
+import sys
 
 MAX_LIVES = len(ascii.hangman) - 1
 LINES_PER_GAME = 11
@@ -63,8 +64,36 @@ def playRound():
 #Inputs: None, but WORDBANK_FILE should be set accordingly
 #Outputs: None
 def retrieveWord():
-	lines = open(WORDBANK_FILE).readlines() 
-	return random.choice(lines).rstrip() #remove newline with rstrip
+	try:
+		with open(WORDBANK_FILE) as words:
+			words = words.readlines()
+			someWord = ''
+			#make sure there is a list of words and chosen word is 3+ letters
+			while(len(words) > 0 and len(someWord) < 2 and not re.match('^[a-zA-Z]+$',someWord)):
+				#randomly choose a word from word bank
+				someWord = random.choice(words)
+
+				#check if word is valid, if not remove it from word bank
+				if len(someWord) < 2 or not re.match('^[a-zA-Z]+$',someWord):
+					words.remove(someWord)
+				someWord = someWord.lower().rstrip() #lowercase and remove newline
+
+			#no words left in list
+			if len(words) < 1:
+					moveCursorUp(LINES_PER_GAME)
+					print("Error: No valid words in \'" + WORDBANK_FILE + "\'")
+					sys.exit(0)
+
+			return someWord
+
+	#failed to open file
+	except OSError as e:
+		moveCursorUp(LINES_PER_GAME)
+		print("Error opening wordbank file \'" + WORDBANK_FILE + '\': ' + str(e))
+		print("Make sure file exists and run again.")
+		sys.exit(0)
+
+
 	
 #Purpose: Takes in user's guess and reveals or reduces lives accordingly
 #Inputs: dictionary with mappings of character to list of positions in string, string of previously revealed chars,
