@@ -8,6 +8,7 @@ import ascii
 import fonts
 import re
 import sys
+import atexit
 
 MAX_LIVES = len(ascii.hangman) - 1
 LINES_PER_GAME = 11
@@ -22,8 +23,12 @@ def main():
 	keepPlaying = 'y'
 	while(keepPlaying == 'y' or keepPlaying == 'yes'):
 		playRound()
-		keepPlaying = input('Would you like to keep playing (y/n)?: ')
-	print("Thank you for playing!")
+		try:
+			keepPlaying = input('Would you like to keep playing (y/n)?: ')
+		except:
+			print()
+			sys.exit(0)
+
 
 #Purpose: Plays 1 round of hangman -- picks a word and let user guess until they win/lose
 #Inputs: None
@@ -78,7 +83,7 @@ def retrieveWord():
 					words.remove(someWord)
 				someWord = someWord.lower().rstrip() #lowercase and remove newline
 
-			#no words left in list
+			#no words left in word bank
 			if len(words) < 1:
 					moveCursorUp(LINES_PER_GAME)
 					print("Error: No valid words in \'" + WORDBANK_FILE + "\'")
@@ -106,7 +111,11 @@ def guess(dictionary, revealed, lives, guesses):
 	#get user guess, but make sure they enter a valid character
 	user_guess = ''
 	while(True):
-		user_guess = input('Guess a character: ')
+		try:
+			user_guess = input('Guess a character: ')
+		except KeyboardInterrupt:
+			print()
+			sys.exit(0)
 		if(len(user_guess) >= 1 and re.match('^[a-zA-Z]+$', user_guess) and not user_guess in guesses):
 			user_guess = user_guess.lower()[0]
 			break
@@ -187,6 +196,13 @@ def moveCursorUp(linesUp):
 #Outputs: None
 def clearCurrentLine():
 	print("\033[K", end='') #ansi code to clear to the end of line
+
+#Purpose: Do things before exit (print thanks for playing)
+#Inputs: None
+#Outputs: None
+def exit_handler():
+	print("Thanks for playing!")
+atexit.register(exit_handler)
 
 
 if __name__ == "__main__":
