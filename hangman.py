@@ -1,6 +1,6 @@
 """
 Author: Bailey Phan
-Date: August 18, 2017
+Date: August 23, 2017
 Purpose: Simple recreation of hangman in Python
 """
 import random 
@@ -23,11 +23,8 @@ def main():
 	keepPlaying = 'y'
 	while(keepPlaying == 'y' or keepPlaying == 'yes'):
 		playRound()
-		try:
-			keepPlaying = input('Would you like to keep playing (y/n)?: ')
-		except:
-			print()
-			sys.exit(0)
+		keepPlaying = getUserInput('Would you like to keep playing (y/n): ')
+		
 
 
 #Purpose: Plays 1 round of hangman -- picks a word and let user guess until they win/lose
@@ -111,11 +108,7 @@ def guess(dictionary, revealed, lives, guesses):
 	#get user guess, but make sure they enter a valid character
 	user_guess = ''
 	while(True):
-		try:
-			user_guess = input('Guess a character: ')
-		except KeyboardInterrupt:
-			print()
-			sys.exit(0)
+		user_guess = getUserInput('Guess a character: ')
 		if(len(user_guess) >= 1 and re.match('^[a-zA-Z]+$', user_guess) and not user_guess in guesses):
 			user_guess = user_guess.lower()[0]
 			break
@@ -204,6 +197,15 @@ def exit_handler():
 	print("Thanks for playing!")
 atexit.register(exit_handler)
 
+#Purpose: Wrapper for input (handle exceptions)
+#Inputs: String for input prompt
+##Outputs: String of user input
+def getUserInput(prompt):
+	try:
+		return input(prompt)
+	except:
+		print()
+		sys.exit(0)
 
 if __name__ == "__main__":
 	main()
